@@ -2,60 +2,50 @@
 
 import React, {Component} from 'react';
 import './App.css';
-import ValidationComponent from './ValidationComponent/ValidationComponent';
-import CharComponent from './CharComponent/CharComponent';
+import Validation from './Validation/Validation';
+import Char from './Char/Char';
 
 
 class App extends Component {
     state = {
-        inputText: 'Write here'
+        inputText: ''
     }
 
     inputChangedHandler = (event) => {
         this.setState({
             inputText: event.target.value,
-            textLength: event.target.value.length,
-            chars: [...event.target.value]
         })
     }
 
     deleteCharHandler = (i) => {
-        const chars = [...this.state.chars];
+        const chars = this.state.inputText.split('');
         chars.splice(i, 1);
-        
-        const inputText = chars.join("")
 
-        this.setState({
-            inputText: inputText,
-            textLength: inputText.length,
-            chars: chars
-        });
+        const updatedText = chars.join("")
+
+        this.setState({inputText: updatedText});
     }
 
     render() {
-        let charList = null;
-
-        if (this.state.chars) {
-            charList = (
-                <div>
-                    {this.state.chars.map((char, i) => {
-                        return <CharComponent
-                            key={i}
-                            text={char}
-                            clicked={() => this.deleteCharHandler(i)}/>
-                    })}
-                </div>
-            );
-        }
-
+        const charList = (
+            <div>
+                {this.state.inputText.split('').map((char, i) => {
+                    return <Char
+                        key={i}
+                        text={char}
+                        clicked={() => this.deleteCharHandler(i)}/>
+                })}
+            </div>
+        );
 
         return (
             <div className="App">
                 <input
+                    type="text"
                     onChange={this.inputChangedHandler}
                     value={this.state.inputText} />
                 <p>{this.state.textLength}</p>
-                <ValidationComponent textLength={this.state.textLength} />
+                <Validation textLength={this.state.inputText.length} />
                 {charList}
             </div>
         );
