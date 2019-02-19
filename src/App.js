@@ -19,8 +19,17 @@ class App extends Component {
         })
     }
 
-    deleteCharHandler = (event, id) => {
+    deleteCharHandler = (i) => {
+        const chars = [...this.state.chars];
+        chars.splice(i, 1);
+        
+        const inputText = chars.join("")
 
+        this.setState({
+            inputText: inputText,
+            textLength: inputText.length,
+            chars: chars
+        });
     }
 
     render() {
@@ -29,10 +38,10 @@ class App extends Component {
         if (this.state.chars) {
             charList = (
                 <div>
-                    {this.state.chars.map((text, i) => {
+                    {this.state.chars.map((char, i) => {
                         return <CharComponent
                             key={i}
-                            text={text}
+                            text={char}
                             clicked={() => this.deleteCharHandler(i)}/>
                     })}
                 </div>
