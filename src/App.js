@@ -1,28 +1,56 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+/* jshint esversion: 6 */
+
+import React, {Component} from 'react';
 import './App.css';
+import ValidationComponent from './ValidationComponent/ValidationComponent';
+import CharComponent from './CharComponent/CharComponent';
+
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    state = {
+        inputText: 'Write here'
+    }
+
+    inputChangedHandler = (event) => {
+        this.setState({
+            inputText: event.target.value,
+            textLength: event.target.value.length,
+            chars: [...event.target.value]
+        })
+    }
+
+    deleteCharHandler = (event, id) => {
+
+    }
+
+    render() {
+        let charList = null;
+
+        if (this.state.chars) {
+            charList = (
+                <div>
+                    {this.state.chars.map((text, i) => {
+                        return <CharComponent
+                            key={i}
+                            text={text}
+                            clicked={() => this.deleteCharHandler(i)}/>
+                    })}
+                </div>
+            );
+        }
+
+
+        return (
+            <div className="App">
+                <input
+                    onChange={this.inputChangedHandler}
+                    value={this.state.inputText} />
+                <p>{this.state.textLength}</p>
+                <ValidationComponent textLength={this.state.textLength} />
+                {charList}
+            </div>
+        );
+    }
 }
 
 export default App;
